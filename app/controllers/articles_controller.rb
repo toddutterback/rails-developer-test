@@ -1,5 +1,7 @@
 class ArticlesController < ApplicationController
   before_action :find_article, only: [:edit, :update, :show, :delete]
+  before_action :authenticate_user!, only: [:show, :new, :edit, :update, :destroy]
+  access all: [:index], user: {except: [:destroy]}, editor: {except: [:destroy]}
 
   def index
     @articles = Article.all
@@ -26,7 +28,7 @@ class ArticlesController < ApplicationController
   def update
     if @article.update_attributes(article_params)
       flash[:notice] = "Successfully updated article!"
-      redirect_to article_path(@articles)
+      redirect_to article_path(@article)
     else
       flash[:alert] = "Error updating article!"
       render :edit
@@ -48,7 +50,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:title, :content)
+    params.require(:article).permit(:title, :category, :content, :id)
   end
 
   def find_article

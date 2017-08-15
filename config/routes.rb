@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
+  mount Ckeditor::Engine => '/ckeditor'
 
   devise_for :users
-  mount Ckeditor::Engine => '/ckeditor'
-	root to: "articles#index";
+
+	root to: "home#index";
 
 	resources :articles
 
